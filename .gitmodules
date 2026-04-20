@@ -1,0 +1,6 @@
+[submodule "Yin-Pitch-Tracking"]
+	path = Yin-Pitch-Tracking
+	url = https://github.com/ashokfernandez/Yin-Pitch-Tracking
+[submodule "external/Yin-Pitch-Tracking"]
+	path = external/Yin-Pitch-Tracking
+	url = https://github.com/ashokfernandez/Yin-Pitch-Tracking

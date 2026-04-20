@@ -1,0 +1,97 @@
+#include "MidiOutputManager.h"
+
+//Applies modifier to input note
+void MidiOutputManager::modNote() {
+    int modifier = 0;
+
+    switch(currentMod) {
+        //OCTAVE_DOWN_2
+        case 1:
+        modifier = -24;
+        break;
+
+        //OCTAVE_DOWN_1
+        case 2:
+        modifier = -12;
+        break;
+
+        //FIFTH_DOWN
+        case 3:
+        modifier = -5;
+        break;
+
+        //MINOR_THIRD_UP
+        case 4:
+        modifier = 3;
+        break;
+
+        //MAJOR_THIRD_UP
+        case 5:
+        modifier = 4;
+        break;
+
+        //FOURTH_UP
+        case 6:
+        modifier = 5;
+        break;
+
+        //FIFTH_UP
+        case 7:
+        modifier = 7;
+        break;
+
+        //MINOR_SEVENTH_UP
+        case 8:
+        modifier = 10;
+        break;
+
+        //MAJOR_SEVENTH_UP
+        case 9:
+        modifier = 11;
+        break;
+
+        //OCTAVE_UP_1
+        case 10: 
+        modifier = 12;
+        break;
+
+        //OCTAVE_UP_2 
+        case 11:
+        modifier = 24;
+        break;
+
+        case 0: default:
+        break;
+    }
+
+    if((inputNote + modifier) > 0) {
+        currentNote = inputNote + modifier;
+    }
+}
+
+//Writes midi output
+int MidiOutputManager::writeMIDIOut(bool status) {
+    /**
+    * Note on: 144 (d) = 0x90
+    * Note off: 128 (d) = 0x80
+    */
+
+    if(status) {
+        message[0] = 0x90;
+        message[2] = noteAttack;
+    } else {
+        message[0] = 0x80;
+        message[2] = noteRelease;
+    }
+
+    message[1] = currentNote;
+
+    midiout.sendMessage(&message);
+}
+
+//Selects port to output to
+void MidiOutputManager::openPort(unsigned int p) {
+    if(midiout.getPortCount() != 0) {
+        midiout.openPort(p);
+    }
+}
