@@ -1,20 +1,16 @@
 #include "AudioInputManager.h"
 
-AudioInputManager::AudioInputManager(NoteDetector* detector) {
-    if(detector == nullptr) {
-        throw std::invalid_argument("callback function is nullptr");
-    }
-
-    nd = detector;
+AudioInputManager::AudioInputManager() {
     options.flags = RTAUDIO_MINIMIZE_LATENCY;
-    parameters.deviceId = adc.getDefaultInputDevice();
+    parameters.deviceId = adc.getDefaultInputDevice();  //This needs to change to be able to select the input
+    std::cout << "Input device id: " << parameters.deviceId << std::endl;
     parameters.nChannels = 1;
     parameters.firstChannel = 0;
 }
-
+ 
 //Opens and starts stream
-void AudioInputManager::startInput() {
-    //adc.openStream(NULL, &parameters, RTAUDIO_SINT16, sampleRate, &bufferFrames, &audioCallback, nullptr, &options);
+void AudioInputManager::startInput(RtAudioCallback audioCallback, void *userData) {
+    adc.openStream(NULL, &parameters, RTAUDIO_SINT16, sampleRate, &bufferFrames, audioCallback, userData, &options);
     adc.startStream();
 }
 
@@ -24,14 +20,4 @@ void AudioInputManager::stopInput() {
     if (adc.isStreamOpen()) {
         adc.closeStream();
     }
-}
-
-int AudioInputManager::audioCallback(void *outputBuffer,
-                  void *inputBuffer,
-                  unsigned int nBufferFrames,
-                  double streamTime,
-                  RtAudioStreamStatus status,
-                  void *userData) 
-{
-   // nd->getMidiNoteFromBuffer();
 }

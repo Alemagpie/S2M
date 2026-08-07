@@ -1,17 +1,15 @@
 #include "NoteDetector.h"
 
-void NoteDetector::init(unsigned int bufferLenght, float thresold) {
-    Yin_init(&yin, bufferLenght, thresold);
+void NoteDetector::init(unsigned int bufferLenght, float threshold) {
+    Yin_init(&yin, bufferLenght, threshold);
 }
 
 //Uses YIN to get pitch
-int NoteDetector::getMidiNoteFromBuffer (void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double streamTime, RtAudioStreamStatus status, void *userData) {
-    if (status)
-    std::cout << "Stream overflow/underflow detected\n";
-
+int NoteDetector::getMidiNoteFromBuffer (void *inputBuffer) {
     input = static_cast<int16_t*>(inputBuffer);
 
     pitch = Yin_getPitch(&yin, input);
+    if(pitch <= 0.0f) return -1;
 
     return (int) round(12 * log2f(pitch / 440.0f) + 69);
 

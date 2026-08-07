@@ -6,13 +6,22 @@
 
 class MidiOutputManager {
     public:
-    void modNote();
-    int writeMIDIOut(bool status);
+    MidiOutputManager() {
+        message.resize(3);
+    }
+    int modNote(int inputNote);
+    void changeMod(unsigned int mode);
+
+    void noteOn(int newNote);
+    void noteOff(int lastNote);
+    void silenceAll();
 
     void openPort(unsigned int p);
 
     private:
-    enum modifier {
+    int writeMIDIOut(bool status, int note);
+
+    enum Modifier {
         NONE,
         OCTAVE_DOWN_2,
         OCTAVE_DOWN_1,
@@ -27,12 +36,10 @@ class MidiOutputManager {
         OCTAVE_UP_2     
     };
 
-    modifier currentMod;
-    int inputNote;
-    int currentNote;
-    bool noteOn = false;
-    unsigned int noteAttack = 90;
-    unsigned int noteRelease = 40;
+    Modifier currentMod = NONE;
+
+    unsigned int noteAttack = 1;
+    unsigned int noteRelease = 1;
 
     RtMidiOut midiout;
     std::vector<unsigned char> message;

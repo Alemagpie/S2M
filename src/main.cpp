@@ -1,24 +1,19 @@
-#include <RtAudio.h>
-#include <Yin.h>
-#include <RtMidi.h>
+#include "InstanceManager.h"
 #include <iostream>
-#include "AudioInputManager.h"
-#include "NoteDetector.h"
-#include "MidiOutputManager.h"
 
+//cmake -S . -B build
 //cmake --build build --config Release
 //start build/Release/s2m.exe
 
 int main() {
     try {
-        /*AudioInputManager audioMan;
-        NoteDetector noteDet;
-        MidiOutputManager midiMan;
-
-        audioMan.startInput(&(noteDet.getMidiNoteFromBuffer));*/
-
-    } catch(std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        InstanceManager mgr;
+        mgr.start();
+        std::cin.get();  // keep alive until Enter
+        mgr.stop();
+    } catch (const std::exception &e) {
+        std::cerr << "Fatal: " << e.what() << std::endl;
+        std::cin.get();
     }
 
     return 0;

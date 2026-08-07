@@ -6,14 +6,13 @@
 
 class AudioInputManager {
     public:
-    AudioInputManager(NoteDetector* detector);
-    int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double streamTime, RtAudioStreamStatus status, void *userData); 
-
+    AudioInputManager();
+    
     int16_t* getInputBuffer() { return input; }
     unsigned int getBufferLenght() { return bufferFrames; }
-    void startInput();
+    void startInput(RtAudioCallback audioCallback, void *userData);
     void stopInput();
-
+ 
     private:
     RtAudio adc;
     std::vector<unsigned int> deviceIds;
@@ -23,8 +22,6 @@ class AudioInputManager {
     unsigned int bufferFrames = 256;
 
     int16_t *input = nullptr;
-
-    NoteDetector* nd;
 };
 
 #endif

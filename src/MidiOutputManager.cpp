@@ -1,7 +1,7 @@
 #include "MidiOutputManager.h"
 
 //Applies modifier to input note
-void MidiOutputManager::modNote() {
+int MidiOutputManager::modNote(int inputNote) {
     int modifier = 0;
 
     switch(currentMod) {
@@ -61,16 +61,32 @@ void MidiOutputManager::modNote() {
         break;
 
         case 0: default:
+        modifier = 0;
         break;
     }
 
-    if((inputNote + modifier) > 0) {
-        currentNote = inputNote + modifier;
-    }
+    unsigned int outputNote = inputNote + modifier;
+    if(outputNote < 0) outputNote = 0;
+    if(outputNote > 127) outputNote = 127;
+
+    return outputNote;
+}
+
+void MidiOutputManager::changeMod(unsigned int mode) {
+    silenceAll();
+    currentMod = (Modifier) mode;
+}
+
+void MidiOutputManager::noteOn(int newNote) {
+    writeMIDIOut(true, modNote(newNote));
+}
+
+void MidiOutputManager::noteOff(int lastNote) {
+    writeMIDIOut(false, modNote(lastNote));
 }
 
 //Writes midi output
-int MidiOutputManager::writeMIDIOut(bool status) {
+int MidiOutputManager::writeMIDIOut(bool status, int note) {
     /**
     * Note on: 144 (d) = 0x90
     * Note off: 128 (d) = 0x80
@@ -84,14 +100,23 @@ int MidiOutputManager::writeMIDIOut(bool status) {
         message[2] = noteRelease;
     }
 
-    message[1] = currentNote;
+    message[1] = note;
 
     midiout.sendMessage(&message);
 }
 
+void MidiOutputManager::silenceAll() {
+
+}
+
 //Selects port to output to
 void MidiOutputManager::openPort(unsigned int p) {
-    if(midiout.getPortCount() != 0) {
+    unsigned int count = midiout.getPortCount();
+    std::cout << "MIDI ports available: " << count << std::endl;
+    if (count > p) {
         midiout.openPort(p);
+        std::cout << "Opened MIDI port " << p << ": " << midiout.getPortName(p) << std::endl;
+    } else {
+        std::cerr << "No MIDI port at index " << p << " available!" << std::endl;
     }
 }

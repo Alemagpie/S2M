@@ -37,11 +37,14 @@ set(RTMIDI_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(rtmidi)
 
-# -------------------------
-# Your executable
-# -------------------------
-add_executable(s2m
-    src/main.cpp
+add_executable(s2m src/main.cpp)
+
+target_sources(s2m PRIVATE
+    src/AudioInputManager.cpp
+    src/NoteDetector.cpp
+    src/MidiOutputManager.cpp
+    src/InstanceManager.cpp
+    external/Yin-Pitch-Tracking/Yin.c
 )
 
 target_link_libraries(s2m
