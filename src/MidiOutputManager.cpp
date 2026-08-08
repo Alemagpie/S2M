@@ -86,7 +86,7 @@ void MidiOutputManager::noteOff(int lastNote) {
 }
 
 //Writes midi output
-int MidiOutputManager::writeMIDIOut(bool status, int note) {
+void MidiOutputManager::writeMIDIOut(bool status, int note) {
     /**
     * Note on: 144 (d) = 0x90
     * Note off: 128 (d) = 0x80

@@ -37,7 +37,32 @@ set(RTMIDI_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(rtmidi)
 
-add_executable(s2m src/main.cpp)
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG docking 
+)
+FetchContent_MakeAvailable(imgui)
+
+add_executable(s2m 
+    src/main.cpp
+    src/AudioInputManager.cpp
+    src/NoteDetector.cpp
+    src/MidiOutputManager.cpp
+    src/InstanceManager.cpp
+    external/Yin-Pitch-Tracking/Yin.c
+
+    # ImGui core
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp   # optional, handy for exploring widgets — drop later
+
+    # Win32 + DX11 backend
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_win32.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_dx11.cpp
+)
 
 target_sources(s2m PRIVATE
     src/AudioInputManager.cpp
@@ -51,9 +76,13 @@ target_link_libraries(s2m
     PRIVATE
         rtaudio
         rtmidi
+        d3d11
+        dxgi
 )
 
 target_include_directories(s2m PRIVATE
     external/Yin-Pitch-Tracking
     include
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
 )

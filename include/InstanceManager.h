@@ -30,6 +30,24 @@ class InstanceManager {
 
     int lastNote = -1;
     bool noteActive = false;
+
+    //Parameters
+    unsigned int inputDeviceID;
+    unsigned int bufferFrames;
+    float yinProbabilityThreshold;
+    float rmsDetectionThreshold;
+    unsigned int noteModifier;
+    unsigned int midiPort;
+
+    /*
+    Variables that can be changed:
+    - Input device
+    - Buffer frames
+    - Detection threshold
+    - Note modifier
+    - Midi port
+    - RMS threshold
+    */
 };
 
 #endif

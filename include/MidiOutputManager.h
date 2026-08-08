@@ -19,7 +19,7 @@ class MidiOutputManager {
     void openPort(unsigned int p);
 
     private:
-    int writeMIDIOut(bool status, int note);
+    void writeMIDIOut(bool status, int note);
 
     enum Modifier {
         NONE,
