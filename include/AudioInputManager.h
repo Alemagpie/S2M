@@ -19,7 +19,7 @@ class AudioInputManager {
     RtAudio::StreamParameters parameters;
     RtAudio::StreamOptions options;
     unsigned int sampleRate = 44100;
-    unsigned int bufferFrames = 256;
+    unsigned int bufferFrames = 2048;
 
     int16_t *input = nullptr;
 };

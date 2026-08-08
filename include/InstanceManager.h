@@ -19,6 +19,15 @@ class InstanceManager {
     NoteDetector noteDet;
     MidiOutputManager midiOut;
 
+    //C1 = 0
+    std::string getNoteFromMidi(unsigned int midi) {
+        std::vector<std::string> notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "B#"};
+        int octave = (midi / 12) + 1;
+        int offset = midi % 12;
+
+        return notes[offset] + std::to_string(octave) + "\n";
+    }
+
     int lastNote = -1;
     bool noteActive = false;
 };

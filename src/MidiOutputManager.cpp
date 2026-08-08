@@ -112,11 +112,17 @@ void MidiOutputManager::silenceAll() {
 //Selects port to output to
 void MidiOutputManager::openPort(unsigned int p) {
     unsigned int count = midiout.getPortCount();
-    std::cout << "MIDI ports available: " << count << std::endl;
+    std::cout << "MIDI ports available: " << count << "\n";
+    for(int i = 0; i < count; i++) {
+        std::string port = midiout.getPortName(i);
+        if(port != "") std::cout << "- Port: " << port << "\n";
+    }
+
     if (count > p) {
         midiout.openPort(p);
-        std::cout << "Opened MIDI port " << p << ": " << midiout.getPortName(p) << std::endl;
-    } else {
-        std::cerr << "No MIDI port at index " << p << " available!" << std::endl;
+        std::cout << "Opened MIDI port " << p << ": " << midiout.getPortName(p) << "\n";
+    } else {    
+        std::cerr << "No MIDI port at index " << p << " available! \n";
     }
+    std::cout << "\n\n";
 }

@@ -5,6 +5,7 @@ extern "C" {
     #include <Yin.h>
 }
 
+#include <iostream>
 #include <math.h>
 
 class NoteDetector {

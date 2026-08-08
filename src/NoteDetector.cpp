@@ -9,6 +9,7 @@ int NoteDetector::getMidiNoteFromBuffer (void *inputBuffer) {
     input = static_cast<int16_t*>(inputBuffer);
 
     pitch = Yin_getPitch(&yin, input);
+    //std::cout << pitch << "\n";
     if(pitch <= 0.0f) return -1;
 
     return (int) round(12 * log2f(pitch / 440.0f) + 69);
