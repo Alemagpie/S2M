@@ -22,15 +22,21 @@ int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudi
     try {
         int16_t maxSample = 0;
         
-        /*for(int i = 0; i < audioIn.getBufferLenght(); i++)
-        if(inputBuffer[i] > maxSample) maxSample = inputBuffer[i];
-        std::cout<<"Peak sample: " << maxSample << "\n";*/
-        //std::cout << "audio block call" << std::endl;
+        //RMS indicates the power of the signal
+        float rms = 0;
+        for(int i = 0; i < audioIn.getBufferLenght(); i++) {
+            float s = inputBuffer[i] / 32768.0f;
+            rms += s*s;
+        }
+        rms = std::sqrt(rms/nFrames);
+        //If signal has low power, ignore it because it could be a harmonic or just noise
+        if(rms < 0.1f) return 0;
+        
         float confidence = noteDet.getConfidence();
         int note = noteDet.getMidiNoteFromBuffer(inputBuffer);
-        std::cout << note << "\n";
+        //std::cout << note << "\n";
 
-        bool validPitch = confidence >= 0.85f && note >= 0 && note <= 127;
+        bool validPitch = confidence >= 0.95f && note >= 0 && note <= 127;
 
         if(!validPitch) {
             if(noteActive){
@@ -41,9 +47,12 @@ int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudi
             return 0;
         }
 
+        note = midiOut.modNote(note);
+
         if(note != lastNote) {
             if(noteActive) midiOut.noteOff(lastNote);
             midiOut.noteOn(note);
+            //note = midiOut.modNote(note);
             std::cout << getNoteFromMidi(note);
             lastNote = note;
             noteActive = true;
