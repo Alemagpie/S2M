@@ -1,9 +1,8 @@
 #include "AudioInputManager.h"
 
 AudioInputManager::AudioInputManager() {
-    options.flags = RTAUDIO_MINIMIZE_LATENCY;
-    parameters.deviceId = 132; //iRig2 Mic        
-    //parameters.deviceId = adc.getDefaultInputDevice();  //This needs to change to be able to select the input
+    options.flags = RTAUDIO_MINIMIZE_LATENCY;       
+    parameters.deviceId = adc.getDefaultInputDevice();  
     std::cout << "Using API: " << RtAudio::getApiDisplayName(adc.getCurrentApi()) << "\n";
     unsigned int count = adc.getDeviceCount();
     std::cout << "Found " << count << " device(s). \n";
