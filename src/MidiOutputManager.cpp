@@ -91,6 +91,7 @@ void MidiOutputManager::writeMIDIOut(bool status, int note) {
     * Note on: 144 (d) = 0x90
     * Note off: 128 (d) = 0x80
     */
+    if(muted) return;
 
     if(status) {
         message[0] = 0x90;
@@ -111,6 +112,7 @@ void MidiOutputManager::silenceAll() {
 
 //Selects port to output to
 void MidiOutputManager::openPort(unsigned int p) {
+    midiout.closePort();
     unsigned int count = midiout.getPortCount();
     std::cout << "MIDI ports available: " << count << "\n";
     for(int i = 0; i < count; i++) {

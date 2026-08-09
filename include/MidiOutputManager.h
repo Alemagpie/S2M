@@ -6,11 +6,14 @@
 
 class MidiOutputManager {
     public:
+    RtMidiOut midiout;
     MidiOutputManager() {
         message.resize(3);
     }
     int modNote(int inputNote);
     void changeMod(unsigned int mode);
+    void mute() { muted = true; }
+    void unmute() { muted = false; }
 
     void noteOn(int newNote);
     void noteOff(int lastNote);
@@ -35,13 +38,12 @@ class MidiOutputManager {
         OCTAVE_UP_1,
         OCTAVE_UP_2     
     };
-
     Modifier currentMod = NONE;
 
     unsigned int noteAttack = 1;
     unsigned int noteRelease = 1;
 
-    RtMidiOut midiout;
+    bool muted = false;
     std::vector<unsigned char> message;
 };
 

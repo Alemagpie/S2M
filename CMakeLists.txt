@@ -50,6 +50,8 @@ add_executable(s2m
     src/NoteDetector.cpp
     src/MidiOutputManager.cpp
     src/InstanceManager.cpp
+    src/AppWindow.cpp
+    src/UIManager.cpp
     external/Yin-Pitch-Tracking/Yin.c
 
     # ImGui core
@@ -69,6 +71,8 @@ target_sources(s2m PRIVATE
     src/NoteDetector.cpp
     src/MidiOutputManager.cpp
     src/InstanceManager.cpp
+    src/AppWindow.cpp
+    src/UIManager.cpp
     external/Yin-Pitch-Tracking/Yin.c
 )
 

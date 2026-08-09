@@ -12,10 +12,57 @@ void InstanceManager::stop() {
     midiOut.silenceAll();
 }
 
+void InstanceManager::setInputDevice(int index) {
+    //May need more attention because of callbacks initialization
+    audioIn.setInputDevice(index);
+}
+
+std::vector<std::string> InstanceManager::getAvailableInputDevices() {
+    std::vector<std::string> devices;
+    unsigned int count = audioIn.adc.getDeviceCount();
+    std::vector<unsigned int> ids = audioIn.adc.getDeviceIds();
+    for(int i = 0; i < count; i++) {
+        devices.push_back(audioIn.adc.getDeviceInfo(ids[i]).name); 
+    }
+
+    return devices;
+}
+
+void InstanceManager::setBufferFrames(unsigned int n) {
+    //May need more attention because of callbacks initialization
+    audioIn.setBufferFrames(n);
+}
+
+void InstanceManager::setYinThreshold(float t) {
+    noteDet.setThreshold(t);
+}
+
+void InstanceManager::setRMSThreshold(float t) {
+    rmsDetectionThreshold = t;
+}
+
+void InstanceManager::setNoteModifier(unsigned int i) {
+    midiOut.changeMod(i);
+}
+
+void InstanceManager::setMidiPort(int index) {
+    midiOut.openPort(index);
+}
+
+std::vector<std::string> InstanceManager::getAvailableOutputPorts() {
+    std::vector<std::string> ports;
+    unsigned int count = midiOut.midiout.getPortCount();
+    for(int i = 0; i < count; i++) {
+        std::string port = midiOut.midiout.getPortName(i);
+        ports.push_back(port);
+    }
+
+    return ports;
+}
+
 int InstanceManager::audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double streamTime, RtAudioStreamStatus status, void *userData) {
     auto *self = static_cast<InstanceManager*>(userData);
     return self->onAudioBlock(static_cast<int16_t*>(inputBuffer), nBufferFrames, status);
-    //std::cout << "audio callback" << std::endl;
 }
 
 int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudioStreamStatus status) {
@@ -66,4 +113,9 @@ int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudi
     }
 
     return 0;
+}
+
+void InstanceManager::mute_unmute(bool s) {
+    if(s) midiOut.mute();
+    else midiOut.unmute();
 }

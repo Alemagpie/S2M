@@ -20,6 +20,8 @@ AudioInputManager::AudioInputManager() {
  
 //Opens and starts stream
 void AudioInputManager::startInput(RtAudioCallback audioCallback, void *userData) {
+    callback = audioCallback;
+    data = userData;
     adc.openStream(NULL, &parameters, RTAUDIO_SINT16, sampleRate, &bufferFrames, audioCallback, userData, &options);
     adc.startStream();
 }
@@ -30,4 +32,20 @@ void AudioInputManager::stopInput() {
     if (adc.isStreamOpen()) {
         adc.closeStream();
     }
+}
+
+void AudioInputManager::restartInput() {
+    stopInput();
+    startInput(callback, data);
+}
+
+void AudioInputManager::setInputDevice(int index) {
+    std::vector<unsigned int> ids = adc.getDeviceIds();
+    parameters.deviceId = ids[index];
+    restartInput();
+}
+
+void AudioInputManager::setBufferFrames(unsigned int n) {
+    bufferFrames = n;
+    restartInput();
 }

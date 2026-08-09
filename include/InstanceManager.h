@@ -5,10 +5,21 @@
 #include "NoteDetector.h"
 #include "MidiOutputManager.h"
 
+//Ties all signal componenets together
 class InstanceManager {
     public:
     void start();
     void stop();
+
+    void setInputDevice(int index);
+    std::vector<std::string> getAvailableInputDevices();
+    void setBufferFrames(unsigned int n);
+    void setYinThreshold(float t);
+    void setRMSThreshold(float t);
+    void setNoteModifier(unsigned int i);
+    void setMidiPort(int index);
+    std::vector<std::string> getAvailableOutputPorts();
+    void mute_unmute(bool s);
 
     private:
     static int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double streamTime, RtAudioStreamStatus status, void *userData);
@@ -47,6 +58,7 @@ class InstanceManager {
     - Note modifier
     - Midi port
     - RMS threshold
+    - Muted
     */
 };
 
