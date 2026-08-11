@@ -31,6 +31,7 @@ UIManager::UIManager(InstanceManager *man) {
 void UIManager::draw() {
     ImGui::Begin("Signal To MIDI");
 
+    ImGui::BeginDisabled(running);
     //input device
     if (ImGui::Combo("Input device", &inputDeviceSelector, inputDeviceNamePtrs.data(), (int)inputDeviceNamePtrs.size())) {
         instanceManager->setInputDevice(inputDeviceSelector);
@@ -40,6 +41,7 @@ void UIManager::draw() {
     if (ImGui::Combo("Buffer size", &bufferFramesSelector, bufferSizes, IM_ARRAYSIZE(bufferSizes))) {
         instanceManager->setBufferFrames(atoi(bufferSizes[bufferFramesSelector]));
     }
+    ImGui::EndDisabled();
 
     if (ImGui::SliderFloat("Confidence Threshold", &yinProbabilityThreshold, 0.0f, 1.0f)) {
         instanceManager->setYinThreshold(yinProbabilityThreshold);
@@ -53,10 +55,12 @@ void UIManager::draw() {
         instanceManager->setNoteModifier(noteModifier);
     }
 
+    ImGui::BeginDisabled(running);
     //midi port
     if (ImGui::Combo("MIDI output", &midiPortSelector, midiPortNamesPtrs.data(), (int)midiPortNamesPtrs.size())) {
         instanceManager->setMidiPort(midiPortSelector);
     }
+    ImGui::EndDisabled();
 
     //Muted
     if(ImGui::Checkbox("Mute", &muted)) {
@@ -65,7 +69,13 @@ void UIManager::draw() {
 
     if (ImGui::Button(running ? "Stop" : "Start")) {
         running = !running;
-        running ? instanceManager->start() : instanceManager->stop();
+        if(running) {
+            instanceManager->start();
+        } else {
+            instanceManager->stop();
+            refreshInputDevices();
+            refreshMidiPorts();
+        }
     }
 
     //ImGui::Text("Detected note: %d", instanceManager->lastDetectedNote.load());

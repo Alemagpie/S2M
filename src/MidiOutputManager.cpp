@@ -121,8 +121,12 @@ void MidiOutputManager::openPort(unsigned int p) {
     }
 
     if (count > p) {
-        midiout.openPort(p);
-        std::cout << "Opened MIDI port " << p << ": " << midiout.getPortName(p) << "\n";
+        try {
+            midiout.openPort(p);
+            std::cout << "Opened MIDI port " << p << ": " << midiout.getPortName(p) << "\n";
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to open MIDI port: " << e.what() << std::endl;
+        }
     } else {    
         std::cerr << "No MIDI port at index " << p << " available! \n";
     }

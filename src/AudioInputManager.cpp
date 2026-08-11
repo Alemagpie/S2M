@@ -34,12 +34,15 @@ void AudioInputManager::stopInput() {
 }
 
 void AudioInputManager::restartInput() {
+    bool wasOpen = adc.isStreamOpen();
     stopInput();
-    startInput(callback, data);
+    
+    if(wasOpen) startInput(callback, data);
 }
 
 void AudioInputManager::setInputDevice(int index) {
     std::vector<unsigned int> ids = adc.getDeviceIds();
+    if(index > ids.size()) return;
     parameters.deviceId = ids[index];
     restartInput();
 }

@@ -4,7 +4,6 @@ void InstanceManager::start() {
     
     audioIn.startInput((RtAudioCallback) audioCallback, this);
     noteDet.init(audioIn.getBufferLenght(), 0.1f);
-    midiOut.openPort(0);
 }
 
 void InstanceManager::stop() {
@@ -31,6 +30,7 @@ std::vector<std::string> InstanceManager::getAvailableInputDevices() {
 void InstanceManager::setBufferFrames(unsigned int n) {
     //May need more attention because of callbacks initialization
     audioIn.setBufferFrames(n);
+    noteDet.setFrameNumber(n);
 }
 
 void InstanceManager::setYinThreshold(float t) {

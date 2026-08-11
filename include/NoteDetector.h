@@ -27,7 +27,6 @@ class NoteDetector {
         init();
     }
 
-
     private:
     Yin yin;
     float pitch = 0;
