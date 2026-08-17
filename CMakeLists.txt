@@ -54,12 +54,14 @@ add_executable(s2m
     src/UIManager.cpp
     external/Yin-Pitch-Tracking/Yin.c
 
+    resources/app.rc
+
     # ImGui core
     ${imgui_SOURCE_DIR}/imgui.cpp
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-    ${imgui_SOURCE_DIR}/imgui_demo.cpp   # optional, handy for exploring widgets — drop later
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp   # optional, for exploring widgets
 
     # Win32 + DX11 backend
     ${imgui_SOURCE_DIR}/backends/imgui_impl_win32.cpp

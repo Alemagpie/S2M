@@ -14,6 +14,14 @@ class MidiOutputManager {
     void changeMod(unsigned int mode);
     void mute() { muted = true; }
     void unmute() { muted = false; }
+    void setAttack(unsigned int a) {
+        if(a > 127) a = 127;
+        noteAttack = a;
+    }
+    void setRelease(unsigned int r) {
+        if(r > 127) r = 127;
+        noteRelease = r;
+    }
 
     void noteOn(int newNote);
     void noteOff(int lastNote);
@@ -40,8 +48,8 @@ class MidiOutputManager {
     };
     Modifier currentMod = NONE;
 
-    unsigned int noteAttack = 1;
-    unsigned int noteRelease = 1;
+    unsigned int noteAttack = 127;
+    unsigned int noteRelease = 127;
 
     bool muted = false;
     std::vector<unsigned char> message;

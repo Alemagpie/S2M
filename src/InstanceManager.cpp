@@ -92,7 +92,7 @@ int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudi
             }
 
             return 0;
-        }
+        } 
 
         note = midiOut.modNote(note);
 
