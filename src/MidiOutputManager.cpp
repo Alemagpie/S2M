@@ -65,7 +65,7 @@ int MidiOutputManager::modNote(int inputNote) {
         break;
     }
 
-    unsigned int outputNote = inputNote + modifier;
+    int outputNote = inputNote + modifier;
     if(outputNote < 0) outputNote = 0;
     if(outputNote > 127) outputNote = 127;
 
@@ -73,7 +73,7 @@ int MidiOutputManager::modNote(int inputNote) {
 }
 
 void MidiOutputManager::changeMod(unsigned int mode) {
-    silenceAll();
+   // silenceAll();
     currentMod = (Modifier) mode;
 }
 
@@ -107,7 +107,9 @@ void MidiOutputManager::writeMIDIOut(bool status, int note) {
 }
 
 void MidiOutputManager::silenceAll() {
-
+    message[0] = 0xFF;  //Reset message
+    message[1] = message[2] = 0;
+    midiout.sendMessage(&message);
 }
 
 //Selects port to output to

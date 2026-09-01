@@ -49,7 +49,7 @@ class MidiOutputManager {
     Modifier currentMod = NONE;
 
     unsigned int noteAttack = 127;
-    unsigned int noteRelease = 127;
+    unsigned int noteRelease = 0;
 
     bool muted = false;
     std::vector<unsigned char> message;

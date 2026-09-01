@@ -1,9 +1,8 @@
 #include "InstanceManager.h"
 
 void InstanceManager::start() {
-    
-    audioIn.startInput((RtAudioCallback) audioCallback, this);
     noteDet.init(audioIn.getBufferLenght(), 0.1f);
+    audioIn.startInput((RtAudioCallback) audioCallback, this);
 }
 
 void InstanceManager::stop() {
@@ -77,11 +76,11 @@ int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudi
         }
         rms = std::sqrt(rms/nFrames);
         //If signal has low power, ignore it because it could be a harmonic or just noise
-        if(rms < 0.1f) return 0;
+        if(rms < rmsDetectionThreshold) return 0;
         
         float confidence = noteDet.getConfidence();
         int note = noteDet.getMidiNoteFromBuffer(inputBuffer);
-        //std::cout << note << "\n";
+        std::cout << note << "\n";
 
         bool validPitch = confidence >= 0.95f && note >= 0 && note <= 127;
 
@@ -93,8 +92,6 @@ int InstanceManager::onAudioBlock(int16_t *inputBuffer, unsigned nFrames, RtAudi
 
             return 0;
         } 
-
-        note = midiOut.modNote(note);
 
         if(note != lastNote) {
             if(noteActive) midiOut.noteOff(lastNote);
