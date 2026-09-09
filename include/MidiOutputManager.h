@@ -12,7 +12,10 @@ class MidiOutputManager {
     }
     int modNote(int inputNote);
     void changeMod(unsigned int mode);
-    void mute() { muted = true; }
+    void mute() { 
+        muted = true;
+        silenceAll();
+    }
     void unmute() { muted = false; }
     void setAttack(unsigned int a) {
         if(a > 127) a = 127;

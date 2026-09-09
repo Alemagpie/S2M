@@ -17,6 +17,7 @@ int main() {
         InstanceManager i_mgr;
         UIManager ui_mgr(&i_mgr);
 
+        //It's started by UI
         //i_mgr.start();
 
         while(window.processMessages()) {

@@ -73,7 +73,7 @@ int MidiOutputManager::modNote(int inputNote) {
 }
 
 void MidiOutputManager::changeMod(unsigned int mode) {
-   // silenceAll();
+   silenceAll();
     currentMod = (Modifier) mode;
 }
 
@@ -107,6 +107,7 @@ void MidiOutputManager::writeMIDIOut(bool status, int note) {
 }
 
 void MidiOutputManager::silenceAll() {
+    //Left here as placeholder, JT4000 doesn't seem to respond to the reset message
     message[0] = 0xFF;  //Reset message
     message[1] = message[2] = 0;
     midiout.sendMessage(&message);
